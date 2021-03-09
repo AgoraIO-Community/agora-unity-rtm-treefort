@@ -12,6 +12,7 @@
 
 # Agora iOS RtcEngineKit is too large to publish to Github
 [Aa]ssets/AgoraEngine/RTM-Engine/Plugins/iOS
+[Aa]ssets/AgoraEngine/Plugins/iOS
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
