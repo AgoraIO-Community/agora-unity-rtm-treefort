@@ -41,6 +41,15 @@ public class AgoraEngine : MonoBehaviour
         mRtcEngine.EnableVideoObserver();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            CreateUserVideoSurface((uint)(Random.value * 100), true);
+        }
+
+    }
+
     public void Button_JoinButtonPressed()
     {
         mRtcEngine.LeaveChannel();

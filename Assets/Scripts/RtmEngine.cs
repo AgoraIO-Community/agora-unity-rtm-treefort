@@ -132,6 +132,8 @@ public class RtmEngine : MonoBehaviour
         }
 
         channelNames.Add(channelName);
+
+        
     }
 
     void RemoveChannelNameFromList(string channelName)
