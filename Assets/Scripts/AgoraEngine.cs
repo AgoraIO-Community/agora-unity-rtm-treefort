@@ -60,21 +60,21 @@ public class AgoraEngine : MonoBehaviour
     private void OnJoinChannelSuccessHandler(string channelName, uint uid, int elapsed)
     {
 
-        Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
+        //Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
         CreateUserVideoSurface(uid, true);
     }
 
     // Remote Client Joins Channel.
     private void OnUserJoinedHandler(uint uid, int elapsed)
     {
-        Debug.Log("Remote user joined channel:" + uid);
+        //Debug.Log("Remote user joined channel:" + uid);
         CreateUserVideoSurface(uid, false);
     }
 
     // Local user leaves channel.
     private void OnLeaveChannelHandler(RtcStats stats)
     {
-        Debug.Log("Local user left channel");
+        //Debug.Log("Local user left channel");
         foreach (GameObject player in playerVideoList)
         {
             Destroy(player.gameObject);
@@ -85,7 +85,7 @@ public class AgoraEngine : MonoBehaviour
     // Remote User Leaves the Channel.
     private void OnUserOfflineHandler(uint uid, USER_OFFLINE_REASON reason)
     {
-        Debug.Log("Remote user left: " + uid);
+        //Debug.Log("Remote user left: " + uid);
         RemoveUserVideoSurface(uid);
     }
 

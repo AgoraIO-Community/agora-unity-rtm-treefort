@@ -45,6 +45,15 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+
+            SendMessageToChannel();
+        }
+    }
+
     private void OnApplicationQuit()
     {
         if(rtmChannel != null)
@@ -71,18 +80,6 @@ public class RtmEngine : MonoBehaviour
         rtmChannel.Join();
     }
 
-    void OnJoinSuccessHandler(int id)
-    {
-        string msg = "OnJoinSuccess id = " + id;
-        Debug.Log(msg);
-    }
-
-    void OnJoinFailureHandler(int id, JOIN_CHANNEL_ERR errorCode)
-    {
-        string msg = "channel OnJoinFailure  id = " + id + " errorCode = " + errorCode;
-        Debug.Log(msg);
-    }
-
     void OnClientLoginSuccessHandler(int id)
     {
         string msg = "client login successful! id = " + id;
@@ -92,6 +89,18 @@ public class RtmEngine : MonoBehaviour
     void OnClientLoginFailureHandler(int id, LOGIN_ERR_CODE errorCode)
     {
         string msg = "client login unsuccessful! id = " + id + " errorCode = " + errorCode;
+        Debug.Log(msg);
+    }
+
+    void OnJoinSuccessHandler(int id)
+    {
+        string msg = "OnJoinSuccess id = " + id;
+        Debug.Log(msg);
+    }
+
+    void OnJoinFailureHandler(int id, JOIN_CHANNEL_ERR errorCode)
+    {
+        string msg = "channel OnJoinFailure  id = " + id + " errorCode = " + errorCode;
         Debug.Log(msg);
     }
 
@@ -111,14 +120,14 @@ public class RtmEngine : MonoBehaviour
 
     void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
     {
-        Debug.Log("Message sent status: " + errorCode);
+        Debug.Log("Message: " + id + " " + messageId + " sent status: " + errorCode);
     }
 
     public void SendMessageToChannel()
     {
         string messageChannelName = channelNameField.text;
         rtmChannel.SendMessage(rtmClient.CreateMessage(messageChannelName));
-        AddChannelToList(messageChannelName);
+        //AddChannelToList(messageChannelName);
     }
 
     void AddChannelToList(string channelName)
@@ -132,8 +141,6 @@ public class RtmEngine : MonoBehaviour
         }
 
         channelNames.Add(channelName);
-
-        
     }
 
     void RemoveChannelNameFromList(string channelName)
