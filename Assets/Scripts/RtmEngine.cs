@@ -32,9 +32,6 @@ public class RtmEngine : MonoBehaviour
 
         rtmClient = new RtmClient(appID, clientEventHandler);
 
-        Login();
-        JoinChannel();
-
         clientEventHandler.OnLoginSuccess = OnClientLoginSuccessHandler;
         clientEventHandler.OnLoginFailure = OnClientLoginFailureHandler;
 
@@ -44,6 +41,10 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnMessageReceived = OnChannelMessageReceivedHandler;
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
         channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
+        channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
+
+        Login();
+        JoinChannel();
     }
 
     private void Update()
@@ -127,6 +128,13 @@ public class RtmEngine : MonoBehaviour
     void OnMemberJoinedHandler(int id, RtmChannelMember member)
     {
         string msg = "channel OnMemberJoinedHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
+        Debug.Log(msg);
+        //messageDisplay.AddTextToDisplay(msg, Message.MessageType.Info);
+    }
+
+    void OnMemberLeftHandler(int id, RtmChannelMember member)
+    {
+        string msg = "channel OnMemberLeftHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
         Debug.Log(msg);
         //messageDisplay.AddTextToDisplay(msg, Message.MessageType.Info);
     }
