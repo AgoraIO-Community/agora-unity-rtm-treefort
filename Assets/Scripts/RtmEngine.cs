@@ -43,6 +43,7 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnLeave = OnLeaveHandler;
         channelEventHandler.OnMessageReceived = OnChannelMessageReceivedHandler;
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
+        channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
     }
 
     private void Update()
@@ -121,6 +122,13 @@ public class RtmEngine : MonoBehaviour
     void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
     {
         Debug.Log("Message: " + id + " " + messageId + " sent status: " + errorCode);
+    }
+
+    void OnMemberJoinedHandler(int id, RtmChannelMember member)
+    {
+        string msg = "channel OnMemberJoinedHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
+        Debug.Log(msg);
+        //messageDisplay.AddTextToDisplay(msg, Message.MessageType.Info);
     }
 
     public void SendMessageToChannel()
