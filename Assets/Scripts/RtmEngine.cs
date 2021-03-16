@@ -8,6 +8,7 @@ using System;
 public class RtmEngine : MonoBehaviour
 {
     public InputField channelNameField;
+    public Text channelText;
     public List<string> channelNames;
 
     private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
@@ -42,17 +43,23 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
         channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
         channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
-
-        Login();
-        JoinChannel();
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Z))
         {
+            Login();
+        }
 
-            SendMessageToChannel();
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            JoinChannel();
+        }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            rtmChannel.SendMessage(rtmClient.CreateMessage("Test!"));
         }
     }
 
@@ -73,7 +80,7 @@ public class RtmEngine : MonoBehaviour
 
     public void Login()
     {
-        rtmClient.Login(null, "userID");
+        rtmClient.Login("", "userID");
     }
 
     public void JoinChannel()

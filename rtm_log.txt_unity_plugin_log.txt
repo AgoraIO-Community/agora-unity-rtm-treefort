@@ -12,3 +12,34 @@ AgoraRtm:  onJoinSuccess
 AgoraRtm:  onMemberCountUpdated
 AgoraRtm:  onMemberLeft
 AgoraRtm:  onMemberCountUpdated
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm: RtmServiceEventHandler onLoginSuccess
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm: RtmServiceEventHandler onLoginSuccess
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm:  onJoinSuccess
+AgoraRtm:  onMemberCountUpdated
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onLeave
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm: RtmServiceEventHandler onLoginSuccess
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm:  onJoinSuccess
+AgoraRtm:  onMemberCountUpdated
+AgoraRtm:  onLeave
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm: RtmServiceEventHandler onLoginSuccess
+AgoraRtm: RtmServiceEventHandler onConnectionStateChanged
+AgoraRtm:  onJoinSuccess
+AgoraRtm:  onSendMessageResult
+AgoraRtm:  onLeave
