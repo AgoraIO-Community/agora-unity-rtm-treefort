@@ -10,6 +10,13 @@ public class RtmEngine : MonoBehaviour
     public InputField channelNameField;
     public Text channelText;
     public List<string> channelNames;
+    public GameObject buttonPrefab;
+    public Transform scrollViewContent;
+    public RectTransform panelContentWindow;
+    public float scrollViewOffset = 60f;
+    public float buttonSpacing = 20f;
+
+    public UIManager uiManager;
 
     private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
 
@@ -43,6 +50,8 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
         channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
         channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
+
+        
     }
 
     private void Update()
@@ -123,7 +132,6 @@ public class RtmEngine : MonoBehaviour
     {
         Debug.Log("client OnChannelMessageReceived id = " + id + ", from user:" + userId + " text:" + message.GetText());
 
-        AddChannelToList(message.ToString());
         // *** UPDATE THE CHANNEL BOX HERE *** //
     }
 
@@ -151,31 +159,5 @@ public class RtmEngine : MonoBehaviour
         string messageChannelName = channelNameField.text;
         rtmChannel.SendMessage(rtmClient.CreateMessage(messageChannelName));
         //AddChannelToList(messageChannelName);
-    }
-
-    void AddChannelToList(string channelName)
-    {
-        foreach(string channel in channelNames)
-        {
-            if(channelName == channel)
-            {
-                return;
-            }
-        }
-
-        channelNames.Add(channelName);
-    }
-
-    void RemoveChannelNameFromList(string channelName)
-    {
-        for(int i = 0;  i < channelNames.Count; i++)
-        {
-            if(channelNames[i] == channelName)
-            {
-                channelNames.RemoveAt(i);
-                channelNames.TrimExcess();
-                return;
-            }
-        }
     }
 }

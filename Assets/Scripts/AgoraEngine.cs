@@ -19,9 +19,15 @@ public class AgoraEngine : MonoBehaviour
     public List<Transform> spawnPointLocations;
     public List<GameObject> playerVideoList;
 
+    public UIManager uiManager;
+
+    public string currentChannel;
+
     // Start is called before the first frame update
     void Start()
     {
+        uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
+
         playerVideoList = new List<GameObject>();
 
         if(mRtcEngine != null)
@@ -39,6 +45,8 @@ public class AgoraEngine : MonoBehaviour
 
         mRtcEngine.EnableVideo();
         mRtcEngine.EnableVideoObserver();
+
+        mRtcEngine.JoinChannel("Lobby", null, 0);
     }
 
     private void Update()
@@ -47,21 +55,21 @@ public class AgoraEngine : MonoBehaviour
         {
             CreateUserVideoSurface((uint)(Random.value * 100), true);
         }
-
     }
 
     public void Button_JoinButtonPressed()
     {
         mRtcEngine.LeaveChannel();
-        mRtcEngine.JoinChannel(channelNameInputField.text.ToUpper(), null, 0);
+        mRtcEngine.JoinChannel(uiManager.GetCurrentChannelSelection(), null, 0);
     }
 
     // Local client joins channel
     private void OnJoinChannelSuccessHandler(string channelName, uint uid, int elapsed)
     {
-
         //Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
         CreateUserVideoSurface(uid, true);
+        uiManager.AddChannelToDropDownList(channelName);
+        currentChannel = channelName;
     }
 
     // Remote Client Joins Channel.
@@ -80,6 +88,11 @@ public class AgoraEngine : MonoBehaviour
             Destroy(player.gameObject);
         }
         playerVideoList.Clear();
+
+        if(stats.userCount == 1)
+        {
+            uiManager.RemoveChannelFromDropDownList(currentChannel);
+        }
     }
 
     // Remote User Leaves the Channel.
