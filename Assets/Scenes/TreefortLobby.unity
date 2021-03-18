@@ -1631,7 +1631,9 @@ MonoBehaviour:
   - {fileID: 516867121}
   - {fileID: 1091080818}
   playerVideoList: []
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 1714066657}
+  rtmEngine: {fileID: 1869105433}
+  currentChannel: 
 --- !u!4 &1112474003
 Transform:
   m_ObjectHideFlags: 0
@@ -2237,6 +2239,7 @@ MonoBehaviour:
   channelNameText: {fileID: 1695909056}
   joinNewChannelButton: {fileID: 1907261467}
   newChannelInputField: {fileID: 554345600}
+  currentChannelSelection: 
 --- !u!4 &1714066658
 Transform:
   m_ObjectHideFlags: 0
@@ -2563,7 +2566,7 @@ MonoBehaviour:
   panelContentWindow: {fileID: 0}
   scrollViewOffset: 70
   buttonSpacing: -40
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 1714066657}
 --- !u!4 &1869105434
 Transform:
   m_ObjectHideFlags: 0

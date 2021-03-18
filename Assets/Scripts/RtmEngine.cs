@@ -16,6 +16,9 @@ public class RtmEngine : MonoBehaviour
     public float scrollViewOffset = 60f;
     public float buttonSpacing = 20f;
 
+    public const string ADD_CHANNEL_COMMAND = "ADD-";
+    public const string DELETE_CHANNEL_COMMAND = "DEL-";
+
     public UIManager uiManager;
 
     private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
@@ -51,24 +54,15 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
         channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
 
-        
+        Login();
+        JoinChannel();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            Login();
-        }
-
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            JoinChannel();
-        }
-
         if(Input.GetKeyDown(KeyCode.C))
         {
-            rtmChannel.SendMessage(rtmClient.CreateMessage("Test!"));
+            rtmChannel.SendMessage(rtmClient.CreateMessage("ADD-"+uiManager.GetCurrentChannelSelection()));
         }
     }
 
@@ -128,11 +122,24 @@ public class RtmEngine : MonoBehaviour
         Debug.Log(msg);
     }
 
+    public void SendRTMChannelMessage(string message)
+    {
+        rtmChannel.SendMessage(rtmClient.CreateMessage(message));
+    }
+
     void OnChannelMessageReceivedHandler(int id, string userId, TextMessage message)
     {
         Debug.Log("client OnChannelMessageReceived id = " + id + ", from user:" + userId + " text:" + message.GetText());
 
-        // *** UPDATE THE CHANNEL BOX HERE *** //
+        string messageString = message.GetText();
+        if(messageString.Contains("ADD-"))
+        {
+            uiManager.AddChannelToDropDownList(messageString.Substring(4));
+        }
+        else if(messageString.Contains("DEL-"))
+        {
+            uiManager.RemoveChannelFromDropDownList(messageString.Substring(4)); 
+        }
     }
 
     void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
@@ -144,20 +151,11 @@ public class RtmEngine : MonoBehaviour
     {
         string msg = "channel OnMemberJoinedHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
         Debug.Log(msg);
-        //messageDisplay.AddTextToDisplay(msg, Message.MessageType.Info);
     }
 
     void OnMemberLeftHandler(int id, RtmChannelMember member)
     {
         string msg = "channel OnMemberLeftHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
         Debug.Log(msg);
-        //messageDisplay.AddTextToDisplay(msg, Message.MessageType.Info);
-    }
-
-    public void SendMessageToChannel()
-    {
-        string messageChannelName = channelNameField.text;
-        rtmChannel.SendMessage(rtmClient.CreateMessage(messageChannelName));
-        //AddChannelToList(messageChannelName);
     }
 }

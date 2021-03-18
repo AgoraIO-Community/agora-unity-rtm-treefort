@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
+// add RTM network calls to ADD and REMOVE channel from dropdown lists
+
+
 public class UIManager : MonoBehaviour
 {
     public Dropdown channelDropdown;
@@ -72,15 +76,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void RefreshUI()
-    {
-        CheckNewChannelName();
-    }
-
     public void AddChannelToDropDownList(string newChannel)
     {
         string newChannelName = newChannel.ToUpper();
-        channelNameText.text = newChannelName;
 
         for (int i = 0; i < channelDropdown.options.Count; i++)
         {
@@ -93,8 +91,13 @@ public class UIManager : MonoBehaviour
 
         List<string> newChannelOption = new List<string>() { newChannelName };
         channelDropdown.AddOptions(newChannelOption);
+        // Send RTM channel call to add newChannelName to dropdown list
+        // send RTM channel call
+        // "ADD-newChannelName"
+        // inside messages: if first 4 characters are ADD-
+        // then get characters[4-end] and call AddChannelToDropDownList()
 
-        RefreshUI();
+        CheckNewChannelName();
     }
 
     public void RemoveChannelFromDropDownList(string channelNameToRemove)

@@ -20,6 +20,7 @@ public class AgoraEngine : MonoBehaviour
     public List<GameObject> playerVideoList;
 
     public UIManager uiManager;
+    public RtmEngine rtmEngine;
 
     public string currentChannel;
 
@@ -69,6 +70,7 @@ public class AgoraEngine : MonoBehaviour
         //Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
         CreateUserVideoSurface(uid, true);
         uiManager.AddChannelToDropDownList(channelName);
+        rtmEngine.SendRTMChannelMessage(RtmEngine.ADD_CHANNEL_COMMAND + channelName);
         currentChannel = channelName;
     }
 
@@ -92,6 +94,7 @@ public class AgoraEngine : MonoBehaviour
         if(stats.userCount == 1)
         {
             uiManager.RemoveChannelFromDropDownList(currentChannel);
+            rtmEngine.SendRTMChannelMessage(RtmEngine.DELETE_CHANNEL_COMMAND + currentChannel);
         }
     }
 
