@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         channelDropdown.onValueChanged.AddListener(delegate { DropdownItemSelected(); });
+
         newChannelInputField.onValueChanged.AddListener(delegate { CheckNewChannelName(); });
 
         joinNewChannelButton.interactable = false;
@@ -76,6 +77,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateChannelNameText(string channelName)
+    {
+        channelNameText.text = channelName.ToUpper();
+    }
+
     public void AddChannelToDropDownList(string newChannel)
     {
         string newChannelName = newChannel.ToUpper();
@@ -91,11 +97,7 @@ public class UIManager : MonoBehaviour
 
         List<string> newChannelOption = new List<string>() { newChannelName };
         channelDropdown.AddOptions(newChannelOption);
-        // Send RTM channel call to add newChannelName to dropdown list
-        // send RTM channel call
-        // "ADD-newChannelName"
-        // inside messages: if first 4 characters are ADD-
-        // then get characters[4-end] and call AddChannelToDropDownList()
+        channelDropdown.value = channelDropdown.options.Count;
 
         CheckNewChannelName();
     }

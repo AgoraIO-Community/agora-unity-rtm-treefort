@@ -47,15 +47,7 @@ public class AgoraEngine : MonoBehaviour
         mRtcEngine.EnableVideo();
         mRtcEngine.EnableVideoObserver();
 
-        mRtcEngine.JoinChannel("Lobby", null, 0);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            CreateUserVideoSurface((uint)(Random.value * 100), true);
-        }
+        mRtcEngine.JoinChannel("LOBBY", null, 0);
     }
 
     public void Button_JoinButtonPressed()
@@ -70,8 +62,13 @@ public class AgoraEngine : MonoBehaviour
         //Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
         CreateUserVideoSurface(uid, true);
         uiManager.AddChannelToDropDownList(channelName);
-        rtmEngine.SendRTMChannelMessage(RtmEngine.ADD_CHANNEL_COMMAND + channelName);
+        uiManager.UpdateChannelNameText(channelName);
         currentChannel = channelName;
+
+        if (channelName.ToUpper() != "LOBBY" || channelName.ToUpper() != "NEW ROOM")
+        {
+            rtmEngine.SendRTMChannelMessage(RtmEngine.ADD_CHANNEL_COMMAND + channelName);
+        }
     }
 
     // Remote Client Joins Channel.

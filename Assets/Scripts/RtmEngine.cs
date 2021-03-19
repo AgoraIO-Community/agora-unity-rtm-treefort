@@ -22,6 +22,7 @@ public class RtmEngine : MonoBehaviour
     public UIManager uiManager;
 
     private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
+    public string userName = "";
 
     private RtmClient rtmClient = null;
     private RtmChannel rtmChannel;
@@ -55,14 +56,13 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
 
         Login();
-        JoinChannel();
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.C))
         {
-            rtmChannel.SendMessage(rtmClient.CreateMessage("ADD-"+uiManager.GetCurrentChannelSelection()));
+            rtmChannel?.SendMessage(rtmClient.CreateMessage("ADD-"+uiManager.GetCurrentChannelSelection()));
         }
     }
 
@@ -83,12 +83,12 @@ public class RtmEngine : MonoBehaviour
 
     public void Login()
     {
-        rtmClient.Login("", "userID");
+        rtmClient.Login("", userName);
     }
 
     public void JoinChannel()
     {
-        rtmChannel = rtmClient.CreateChannel("Lobby", channelEventHandler);
+        rtmChannel = rtmClient.CreateChannel("LOBBY", channelEventHandler);
         rtmChannel.Join();
     }
 
@@ -96,6 +96,8 @@ public class RtmEngine : MonoBehaviour
     {
         string msg = "client login successful! id = " + id;
         Debug.Log(msg);
+
+        JoinChannel();
     }
 
     void OnClientLoginFailureHandler(int id, LOGIN_ERR_CODE errorCode)
@@ -124,7 +126,7 @@ public class RtmEngine : MonoBehaviour
 
     public void SendRTMChannelMessage(string message)
     {
-        rtmChannel.SendMessage(rtmClient.CreateMessage(message));
+        rtmChannel?.SendMessage(rtmClient.CreateMessage(message));
     }
 
     void OnChannelMessageReceivedHandler(int id, string userId, TextMessage message)

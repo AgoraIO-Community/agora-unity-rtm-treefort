@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/TreefortLobby.unity
+    guid: 40a13bb51207b42b2a99429d306b628a
   m_configObjects: {}
