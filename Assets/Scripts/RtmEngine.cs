@@ -7,13 +7,14 @@ public class RtmEngine : MonoBehaviour
     public const string ADD_CHANNEL_COMMAND = "ADD-";
     public const string DELETE_CHANNEL_COMMAND = "DEL-";
 
+#pragma warning disable 649
     [SerializeField] private UIManager uiManager;
     [SerializeField] private string appID;
     [SerializeField] private string userName;
+#pragma warning restore 649
 
     private RtmClient rtmClient = null;
     private RtmChannel rtmChannel;
-
     private RtmClientEventHandler clientEventHandler;
     private RtmChannelEventHandler channelEventHandler;
 

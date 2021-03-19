@@ -1,23 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using agora_gaming_rtc;
-using UnityEngine.UI;
 
 public class AgoraEngine : MonoBehaviour
 {
-    [SerializeField] private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
     private IRtcEngine mRtcEngine;
-
+    [SerializeField] private string appID;
+    [SerializeField] private string currentChannel;
     [SerializeField] private List<GameObject> playerVideoList;
-
-// disable variable warnings
+    
+    // disable variable warnings
 #pragma warning disable 649
     [SerializeField] private List<Transform> spawnPointLocations;
     [SerializeField] private UIManager uiManager;
     [SerializeField] private RtmEngine rtmEngine;
 #pragma warning restore 649
-
-    [SerializeField] private string currentChannel;
 
     void Start()
     {

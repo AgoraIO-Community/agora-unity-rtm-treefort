@@ -4,14 +4,16 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public const string DEMO_LOBBY = "LOBBY";
+    public const string NEW_ROOM_CREATOR = "NEW ROOM";
+
+#pragma warning disable 649
     [SerializeField] private Dropdown channelDropdown;
     [SerializeField] private Text channelNameText;
     [SerializeField] private Button joinNewChannelButton;
     [SerializeField] private InputField newChannelInputField;
     [SerializeField] private string currentChannelSelection = "";
-
-    public const string DEMO_LOBBY = "LOBBY";
-    public const string NEW_ROOM_CREATOR = "NEW ROOM";
+#pragma warning restore 649
 
     void Start()
     {

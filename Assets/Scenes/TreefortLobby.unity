@@ -1713,7 +1713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584f36a3da53f4613bfddd3ac958c0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appID: 8ac5b43a061d49d6a57360ce4ae6e92b
+  appID: 
   playerVideoList: []
   spawnPointLocations:
   - {fileID: 2080706267}
@@ -2648,7 +2648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 1714066657}
-  appID: 8ac5b43a061d49d6a57360ce4ae6e92b
+  appID: 
   userName: 1
 --- !u!4 &1869105434
 Transform:
