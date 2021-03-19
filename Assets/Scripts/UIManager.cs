@@ -1,25 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-
-
-// add RTM network calls to ADD and REMOVE channel from dropdown lists
-
 
 public class UIManager : MonoBehaviour
 {
-    public Dropdown channelDropdown;
-    public Text channelNameText;
-    public Button joinNewChannelButton;
-    public InputField newChannelInputField;
-    public string currentChannelSelection = "";
+    [SerializeField] private Dropdown channelDropdown;
+    [SerializeField] private Text channelNameText;
+    [SerializeField] private Button joinNewChannelButton;
+    [SerializeField] private InputField newChannelInputField;
+    [SerializeField] private string currentChannelSelection = "";
+
+    public const string DEMO_LOBBY = "LOBBY";
+    public const string NEW_ROOM_CREATOR = "NEW ROOM";
 
     void Start()
     {
-        channelDropdown.onValueChanged.AddListener(delegate { DropdownItemSelected(); });
+        HelperTools.AssignedInEditorCheck(channelDropdown);
+        HelperTools.AssignedInEditorCheck(channelNameText);
+        HelperTools.AssignedInEditorCheck(joinNewChannelButton);
+        HelperTools.AssignedInEditorCheck(newChannelInputField);
 
+        channelDropdown.onValueChanged.AddListener(delegate { DropdownItemSelected(); });
         newChannelInputField.onValueChanged.AddListener(delegate { CheckNewChannelName(); });
 
         joinNewChannelButton.interactable = false;
@@ -28,12 +29,13 @@ public class UIManager : MonoBehaviour
 
     public string GetCurrentChannelSelection() => currentChannelSelection;
 
+    // When the user selects a new choice from the dropdown, this function fires
     private void DropdownItemSelected()
     {
         int index = channelDropdown.value;
-        string value = channelDropdown.options[index].text;
+        string currentDropdownChoice = channelDropdown.options[index].text;
 
-        if(value == "NEW ROOM")
+        if(currentDropdownChoice == NEW_ROOM_CREATOR)
         {
             newChannelInputField.gameObject.SetActive(true);
             newChannelInputField.text = "";
@@ -41,17 +43,18 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            currentChannelSelection = channelDropdown.options[index].text;
             newChannelInputField.gameObject.SetActive(false);
+            currentChannelSelection = channelDropdown.options[index].text;
             joinNewChannelButton.interactable = true;
         }
 
-        if(value.ToUpper() == channelNameText.text.ToUpper())
+        if(currentDropdownChoice.ToUpper() == channelNameText.text.ToUpper())
         {
             joinNewChannelButton.interactable = false;
         }
     }
 
+    // When the user types a character into the ChannelInputField, this function fires
     void CheckNewChannelName()
     {
         if(newChannelInputField.text == "")
@@ -105,7 +108,7 @@ public class UIManager : MonoBehaviour
     public void RemoveChannelFromDropDownList(string channelNameToRemove)
     {
         string deletedChannelName = channelNameToRemove.ToUpper();
-        if(deletedChannelName == "LOBBY")
+        if(deletedChannelName == DEMO_LOBBY || deletedChannelName == NEW_ROOM_CREATOR)
         {
             return;
         }

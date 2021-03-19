@@ -1713,15 +1713,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584f36a3da53f4613bfddd3ac958c0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  channelNameInputField: {fileID: 554345600}
-  joinButton: {fileID: 1907261467}
-  spawnPoint: {fileID: 0}
+  appID: 8ac5b43a061d49d6a57360ce4ae6e92b
+  playerVideoList: []
   spawnPointLocations:
   - {fileID: 2080706267}
   - {fileID: 1945884674}
   - {fileID: 516867121}
   - {fileID: 1091080818}
-  playerVideoList: []
   uiManager: {fileID: 1714066657}
   rtmEngine: {fileID: 1869105433}
   currentChannel: 
@@ -2344,7 +2342,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1777291693
 GameObject:
@@ -2649,18 +2647,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3c5cd4f555b4ef59b0b323ddf090ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  channelNameField: {fileID: 554345600}
-  channelText: {fileID: 948558532}
-  channelNames: []
-  buttonPrefab: {fileID: 1422876084828329524, guid: a3eb5a158b95d46f7a7a2b24f36d99b5,
-    type: 3}
-  scrollViewContent: {fileID: 0}
-  panelContentWindow: {fileID: 0}
-  scrollViewOffset: 70
-  buttonSpacing: -40
   uiManager: {fileID: 1714066657}
+  appID: 8ac5b43a061d49d6a57360ce4ae6e92b
   userName: 1
-  debugText: {fileID: 155953426}
 --- !u!4 &1869105434
 Transform:
   m_ObjectHideFlags: 0
@@ -2673,7 +2662,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1907261465
 GameObject:

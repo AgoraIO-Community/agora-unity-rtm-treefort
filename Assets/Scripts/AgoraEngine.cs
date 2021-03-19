@@ -3,32 +3,24 @@ using UnityEngine;
 using agora_gaming_rtc;
 using UnityEngine.UI;
 
-
-// players join RTM channel to pass the room data around to each person
-
-
 public class AgoraEngine : MonoBehaviour
 {
-    private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
+    [SerializeField] private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
     private IRtcEngine mRtcEngine;
 
-    public InputField channelNameInputField;
-    public Button joinButton;
-    public Transform spawnPoint;
+    [SerializeField] private List<GameObject> playerVideoList;
 
-    public List<Transform> spawnPointLocations;
-    public List<GameObject> playerVideoList;
+// disable variable warnings
+#pragma warning disable 649
+    [SerializeField] private List<Transform> spawnPointLocations;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private RtmEngine rtmEngine;
+#pragma warning restore 649
 
-    public UIManager uiManager;
-    public RtmEngine rtmEngine;
+    [SerializeField] private string currentChannel;
 
-    public string currentChannel;
-
-    // Start is called before the first frame update
     void Start()
     {
-        uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
-
         playerVideoList = new List<GameObject>();
 
         if(mRtcEngine != null)
@@ -36,6 +28,10 @@ public class AgoraEngine : MonoBehaviour
             IRtcEngine.Destroy();
         }
 
+        HelperTools.AssignedInEditorCheck(uiManager);
+        HelperTools.AssignedInEditorCheck(rtmEngine);
+
+        // Agora Essentials --------------------------- //
         mRtcEngine = IRtcEngine.GetEngine(appID);
 
         mRtcEngine.OnJoinChannelSuccess = OnJoinChannelSuccessHandler;
@@ -43,13 +39,14 @@ public class AgoraEngine : MonoBehaviour
         mRtcEngine.OnLeaveChannel = OnLeaveChannelHandler;
         mRtcEngine.OnUserOffline = OnUserOfflineHandler;
 
-
         mRtcEngine.EnableVideo();
         mRtcEngine.EnableVideoObserver();
 
         mRtcEngine.JoinChannel("LOBBY", null, 0);
+        // -------------------------------------------- //
     }
 
+    // Button assigned in Editor
     public void Button_JoinButtonPressed()
     {
         mRtcEngine.LeaveChannel();
@@ -59,14 +56,16 @@ public class AgoraEngine : MonoBehaviour
     // Local client joins channel
     private void OnJoinChannelSuccessHandler(string channelName, uint uid, int elapsed)
     {
-        //Debug.Log("Local user joined channel: + " + channelName + ": " + uid);
+        Debug.Log("Local user: " + uid + " joined channel: " + channelName);
+
         CreateUserVideoSurface(uid, true);
         uiManager.AddChannelToDropDownList(channelName);
         uiManager.UpdateChannelNameText(channelName);
         currentChannel = channelName;
 
-        if (channelName.ToUpper() != "LOBBY" || channelName.ToUpper() != "NEW ROOM")
+        if (channelName.ToUpper() != UIManager.DEMO_LOBBY || channelName.ToUpper() != UIManager.NEW_ROOM_CREATOR)
         {
+            // send message to all players in "RTM network"
             rtmEngine.SendRTMChannelMessage(RtmEngine.ADD_CHANNEL_COMMAND + channelName);
         }
     }
@@ -74,14 +73,16 @@ public class AgoraEngine : MonoBehaviour
     // Remote Client Joins Channel.
     private void OnUserJoinedHandler(uint uid, int elapsed)
     {
-        //Debug.Log("Remote user joined channel:" + uid);
+        Debug.Log("Remote user joined channel:" + uid);
+
         CreateUserVideoSurface(uid, false);
     }
 
     // Local user leaves channel.
     private void OnLeaveChannelHandler(RtcStats stats)
     {
-        //Debug.Log("Local user left channel");
+        Debug.Log("Local user left channel");
+
         foreach (GameObject player in playerVideoList)
         {
             Destroy(player.gameObject);
@@ -91,6 +92,8 @@ public class AgoraEngine : MonoBehaviour
         if(stats.userCount == 1)
         {
             uiManager.RemoveChannelFromDropDownList(currentChannel);
+
+            // send message to all players in "RTM network"
             rtmEngine.SendRTMChannelMessage(RtmEngine.DELETE_CHANNEL_COMMAND + currentChannel);
         }
     }
@@ -98,7 +101,8 @@ public class AgoraEngine : MonoBehaviour
     // Remote User Leaves the Channel.
     private void OnUserOfflineHandler(uint uid, USER_OFFLINE_REASON reason)
     {
-        //Debug.Log("Remote user left: " + uid);
+        Debug.Log("Remote user left: " + uid + " for reason: " + reason);
+
         RemoveUserVideoSurface(uid);
     }
 
@@ -124,10 +128,10 @@ public class AgoraEngine : MonoBehaviour
         }
 
         newUserVideo.transform.localScale = Vector3.one * 3;
-
         newUserVideo.name = uid.ToString();
         playerVideoList.Add(newUserVideo);
 
+        // this is because we are using 4 spawn points per room
         if(playerVideoList.Count < 5)
         {
             newUserVideo.transform.position = spawnPointLocations[playerVideoList.Count - 1].position;
@@ -161,6 +165,7 @@ public class AgoraEngine : MonoBehaviour
         }
     }
 
+    // Agora Essentials -------------- //
     private void OnApplicationQuit()
     {
         IRtcEngine.Destroy();

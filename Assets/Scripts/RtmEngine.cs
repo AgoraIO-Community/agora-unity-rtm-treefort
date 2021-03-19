@@ -1,76 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using agora_rtm;
-using UnityEngine.UI;
 using System;
-
 
 public class RtmEngine : MonoBehaviour
 {
-    public InputField channelNameField;
-    public Text channelText;
-    public List<string> channelNames;
-    public GameObject buttonPrefab;
-    public Transform scrollViewContent;
-    public RectTransform panelContentWindow;
-    public float scrollViewOffset = 60f;
-    public float buttonSpacing = 20f;
-
     public const string ADD_CHANNEL_COMMAND = "ADD-";
     public const string DELETE_CHANNEL_COMMAND = "DEL-";
 
-    public UIManager uiManager;
-
-    private string appID = "8ac5b43a061d49d6a57360ce4ae6e92b";
-    public string userName = "";
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private string appID;
+    [SerializeField] private string userName;
 
     private RtmClient rtmClient = null;
     private RtmChannel rtmChannel;
-    private RtmCallManager rtmCallManager;
 
     private RtmClientEventHandler clientEventHandler;
     private RtmChannelEventHandler channelEventHandler;
-    private RtmCallEventHandler callEventHandler;
 
-    public Text debugText;
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        channelNames = new List<string>();
+        HelperTools.AssignedInEditorCheck(uiManager);
+        HelperTools.AssignedInEditorCheck(appID);
+        HelperTools.AssignedInEditorCheck(userName);
 
         clientEventHandler = new RtmClientEventHandler();
         channelEventHandler = new RtmChannelEventHandler();
-        callEventHandler = new RtmCallEventHandler();
 
         rtmClient = new RtmClient(appID, clientEventHandler);
 
+        // RTM client callbacks
         clientEventHandler.OnLoginSuccess = OnClientLoginSuccessHandler;
         clientEventHandler.OnLoginFailure = OnClientLoginFailureHandler;
 
-        channelEventHandler.OnJoinSuccess = OnJoinSuccessHandler;
-        channelEventHandler.OnJoinFailure = OnJoinFailureHandler;
-        channelEventHandler.OnLeave = OnLeaveHandler;
+        // RTM channel-wide callbacks
         channelEventHandler.OnMessageReceived = OnChannelMessageReceivedHandler;
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
-        channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
-        channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
-
-
 
         Login();
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-            rtmChannel?.SendMessage(rtmClient.CreateMessage("ADD-"+uiManager.GetCurrentChannelSelection()));
-        }
-    }
-
+    // Agora Essentials -------------- //
     private void OnApplicationQuit()
     {
         if(rtmChannel != null)
@@ -85,16 +54,11 @@ public class RtmEngine : MonoBehaviour
             rtmClient = null;
         }
     }
+    // -------------------------------- //
 
     public void Login()
     {
         rtmClient.Login("", userName);
-    }
-
-    public void JoinChannel()
-    {
-        rtmChannel = rtmClient.CreateChannel("LOBBY", channelEventHandler);
-        rtmChannel.Join();
     }
 
     void OnClientLoginSuccessHandler(int id)
@@ -102,46 +66,34 @@ public class RtmEngine : MonoBehaviour
         string msg = "client login successful! id = " + id;
         Debug.Log(msg);
 
-        debugText.text += "\n login success";
-
+        // Agora Essentials ---------------------------------------------------------- //
+        // Make sure to Join the RTM channel in the callback of a successful RTM login //
         JoinChannel();
+        // --------------------------------------------------------------------------- //
     }
 
     void OnClientLoginFailureHandler(int id, LOGIN_ERR_CODE errorCode)
     {
         string msg = "client login unsuccessful! id = " + id + " errorCode = " + errorCode;
         Debug.Log(msg);
-
-        debugText.text += "\n login failure";
     }
 
-    void OnJoinSuccessHandler(int id)
+    public void JoinChannel()
     {
-        string msg = "OnJoinSuccess id = " + id;
-        Debug.Log(msg);
-
-        debugText.text += "\n join success";
-    }
-
-    void OnJoinFailureHandler(int id, JOIN_CHANNEL_ERR errorCode)
-    {
-        string msg = "channel OnJoinFailure  id = " + id + " errorCode = " + errorCode;
-        Debug.Log(msg);
-
-        debugText.text += "\n join failure";
-    }
-
-    void OnLeaveHandler(int id, LEAVE_CHANNEL_ERR errorCode)
-    {
-        string msg = "client onleave id = " + id + " errorCode = " + errorCode;
-        Debug.Log(msg);
+        rtmChannel = rtmClient?.CreateChannel("NETWORK", channelEventHandler);
+        rtmChannel.Join();
     }
 
     public void SendRTMChannelMessage(string message)
     {
         rtmChannel?.SendMessage(rtmClient.CreateMessage(message));
 
-        debugText.text += "\n send message: " + message;
+        Debug.Log("Attempting to send RTM channel message: " + message);
+    }
+
+    void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
+    {
+        Debug.Log("Message: " + id + " " + messageId + " sent status: " + errorCode);
     }
 
     void OnChannelMessageReceivedHandler(int id, string userId, TextMessage message)
@@ -149,33 +101,13 @@ public class RtmEngine : MonoBehaviour
         Debug.Log("client OnChannelMessageReceived id = " + id + ", from user:" + userId + " text:" + message.GetText());
 
         string messageString = message.GetText();
-        if(messageString.Contains("ADD-"))
+        if (messageString.Contains(ADD_CHANNEL_COMMAND))
         {
             uiManager.AddChannelToDropDownList(messageString.Substring(4));
         }
-        else if(messageString.Contains("DEL-"))
+        else if (messageString.Contains(DELETE_CHANNEL_COMMAND))
         {
-            uiManager.RemoveChannelFromDropDownList(messageString.Substring(4)); 
+            uiManager.RemoveChannelFromDropDownList(messageString.Substring(4));
         }
-
-        debugText.text += "\n message received:" + messageString;
-    }
-
-    void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
-    {
-        Debug.Log("Message: " + id + " " + messageId + " sent status: " + errorCode);
-        debugText.text += "\n message send result :" + errorCode;
-    }
-
-    void OnMemberJoinedHandler(int id, RtmChannelMember member)
-    {
-        string msg = "channel OnMemberJoinedHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
-        Debug.Log(msg);
-    }
-
-    void OnMemberLeftHandler(int id, RtmChannelMember member)
-    {
-        string msg = "channel OnMemberLeftHandler member ID=" + member.GetUserId() + " channelId = " + member.GetChannelId();
-        Debug.Log(msg);
     }
 }
