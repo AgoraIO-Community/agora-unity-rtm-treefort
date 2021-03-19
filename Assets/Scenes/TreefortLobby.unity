@@ -326,7 +326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 286, y: 73}
+  m_AnchoredPosition: {x: -279, y: 73}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &155953426
@@ -358,10 +358,12 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Debug:'
+  m_Text: 'Debug:
+
+'
 --- !u!222 &155953427
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2657,6 +2659,7 @@ MonoBehaviour:
   scrollViewOffset: 70
   buttonSpacing: -40
   uiManager: {fileID: 1714066657}
+  userName: 1
   debugText: {fileID: 155953426}
 --- !u!4 &1869105434
 Transform:

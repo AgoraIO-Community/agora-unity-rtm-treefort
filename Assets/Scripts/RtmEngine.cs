@@ -5,6 +5,7 @@ using agora_rtm;
 using UnityEngine.UI;
 using System;
 
+
 public class RtmEngine : MonoBehaviour
 {
     public InputField channelNameField;
@@ -32,6 +33,8 @@ public class RtmEngine : MonoBehaviour
     private RtmChannelEventHandler channelEventHandler;
     private RtmCallEventHandler callEventHandler;
 
+    public Text debugText;
+
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +57,8 @@ public class RtmEngine : MonoBehaviour
         channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
         channelEventHandler.OnMemberJoined = OnMemberJoinedHandler;
         channelEventHandler.OnMemberLeft = OnMemberLeftHandler;
+
+
 
         Login();
     }
@@ -97,6 +102,8 @@ public class RtmEngine : MonoBehaviour
         string msg = "client login successful! id = " + id;
         Debug.Log(msg);
 
+        debugText.text += "\n login success";
+
         JoinChannel();
     }
 
@@ -104,18 +111,24 @@ public class RtmEngine : MonoBehaviour
     {
         string msg = "client login unsuccessful! id = " + id + " errorCode = " + errorCode;
         Debug.Log(msg);
+
+        debugText.text += "\n login failure";
     }
 
     void OnJoinSuccessHandler(int id)
     {
         string msg = "OnJoinSuccess id = " + id;
         Debug.Log(msg);
+
+        debugText.text += "\n join success";
     }
 
     void OnJoinFailureHandler(int id, JOIN_CHANNEL_ERR errorCode)
     {
         string msg = "channel OnJoinFailure  id = " + id + " errorCode = " + errorCode;
         Debug.Log(msg);
+
+        debugText.text += "\n join failure";
     }
 
     void OnLeaveHandler(int id, LEAVE_CHANNEL_ERR errorCode)
@@ -127,6 +140,8 @@ public class RtmEngine : MonoBehaviour
     public void SendRTMChannelMessage(string message)
     {
         rtmChannel?.SendMessage(rtmClient.CreateMessage(message));
+
+        debugText.text += "\n send message: " + message;
     }
 
     void OnChannelMessageReceivedHandler(int id, string userId, TextMessage message)
@@ -142,11 +157,14 @@ public class RtmEngine : MonoBehaviour
         {
             uiManager.RemoveChannelFromDropDownList(messageString.Substring(4)); 
         }
+
+        debugText.text += "\n message received:" + messageString;
     }
 
     void OnSendMessageResultHandler(int id, Int64 messageId, CHANNEL_MESSAGE_ERR_CODE errorCode)
     {
         Debug.Log("Message: " + id + " " + messageId + " sent status: " + errorCode);
+        debugText.text += "\n message send result :" + errorCode;
     }
 
     void OnMemberJoinedHandler(int id, RtmChannelMember member)
