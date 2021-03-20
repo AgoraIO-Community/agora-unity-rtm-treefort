@@ -15,7 +15,7 @@ public static class HelperTools
     {
         if (stringToCheck == null || stringToCheck == "")
         {
-            Debug.LogWarning(stringToCheck + " is null or empty!");
+            Debug.LogWarning("String is null or empty!");
             Debug.Break();
         }
     }

@@ -5,12 +5,12 @@ using agora_gaming_rtc;
 public class AgoraEngine : MonoBehaviour
 {
     private IRtcEngine mRtcEngine;
+
+    // disable variable warnings
+#pragma warning disable 649
     [SerializeField] private string appID;
     [SerializeField] private string currentChannel;
     [SerializeField] private List<GameObject> playerVideoList;
-    
-    // disable variable warnings
-#pragma warning disable 649
     [SerializeField] private List<Transform> spawnPointLocations;
     [SerializeField] private UIManager uiManager;
     [SerializeField] private RtmEngine rtmEngine;
@@ -38,9 +38,12 @@ public class AgoraEngine : MonoBehaviour
 
         mRtcEngine.EnableVideo();
         mRtcEngine.EnableVideoObserver();
-
-        mRtcEngine.JoinChannel("LOBBY", null, 0);
         // -------------------------------------------- //
+    }
+
+    public void JoinLobby()
+    {
+        mRtcEngine.JoinChannel("LOBBY", null, 0);
     }
 
     // Button assigned in Editor

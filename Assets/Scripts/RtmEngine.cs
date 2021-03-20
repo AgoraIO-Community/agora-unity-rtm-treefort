@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using agora_rtm;
 using System;
+using UnityEngine.UI;
 
 public class RtmEngine : MonoBehaviour
 {
@@ -13,6 +14,12 @@ public class RtmEngine : MonoBehaviour
     [SerializeField] private string userName;
 #pragma warning restore 649
 
+    [SerializeField] private InputField userNameInputField;
+    [SerializeField] private Button joinTreefortButton;
+    [SerializeField] private GameObject RTMPanel;
+    [SerializeField] private GameObject ChannelPanel;
+    [SerializeField] private AgoraEngine agoraEngine;
+
     private RtmClient rtmClient = null;
     private RtmChannel rtmChannel;
     private RtmClientEventHandler clientEventHandler;
@@ -23,21 +30,14 @@ public class RtmEngine : MonoBehaviour
         HelperTools.AssignedInEditorCheck(uiManager);
         HelperTools.AssignedInEditorCheck(appID);
         HelperTools.AssignedInEditorCheck(userName);
+        HelperTools.AssignedInEditorCheck(userNameInputField);
 
-        clientEventHandler = new RtmClientEventHandler();
-        channelEventHandler = new RtmChannelEventHandler();
+        ChannelPanel.SetActive(false);
 
-        rtmClient = new RtmClient(appID, clientEventHandler);
-
+        userNameInputField.onValueChanged.AddListener(delegate { CheckForInput(); });
+        joinTreefortButton.interactable = false;
         // RTM client callbacks
-        clientEventHandler.OnLoginSuccess = OnClientLoginSuccessHandler;
-        clientEventHandler.OnLoginFailure = OnClientLoginFailureHandler;
-
-        // RTM channel-wide callbacks
-        channelEventHandler.OnMessageReceived = OnChannelMessageReceivedHandler;
-        channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
-
-        Login();
+        
     }
 
     // Agora Essentials -------------- //
@@ -57,9 +57,59 @@ public class RtmEngine : MonoBehaviour
     }
     // -------------------------------- //
 
+    private void CheckForInput()
+    {
+        if(userNameInputField.text == "")
+        {
+            joinTreefortButton.interactable = false;
+        }
+        else
+        {
+            joinTreefortButton.interactable = true;
+        }
+    }
+
+    public void Button_JoinTreefort()
+    {
+        // Disable the Fort Joining Panel
+        RTMPanel.SetActive(false);
+        ChannelPanel.SetActive(true);
+        Login();
+    }
+
     public void Login()
     {
+        clientEventHandler = new RtmClientEventHandler();
+        channelEventHandler = new RtmChannelEventHandler();
+
+        clientEventHandler.OnLoginSuccess = OnClientLoginSuccessHandler;
+        clientEventHandler.OnLoginFailure = OnClientLoginFailureHandler;
+
+        // RTM channel-wide callbacks
+        channelEventHandler.OnMessageReceived = OnChannelMessageReceivedHandler;
+        channelEventHandler.OnSendMessageResult = OnSendMessageResultHandler;
+        channelEventHandler.OnJoinSuccess = OnJoinSuccessHandler;
+
+        rtmClient = new RtmClient(appID, clientEventHandler);
         rtmClient.Login("", userName);
+    }
+
+    public void Button_Logout()
+    {
+        if (rtmChannel != null)
+        {
+            rtmChannel.Dispose();
+            rtmChannel = null;
+        }
+
+        if (rtmClient != null)
+        {
+            rtmClient.Dispose();
+            rtmClient = null;
+        }
+
+        ChannelPanel.SetActive(false);
+        RTMPanel.SetActive(true);
     }
 
     void OnClientLoginSuccessHandler(int id)
@@ -83,6 +133,11 @@ public class RtmEngine : MonoBehaviour
     {
         rtmChannel = rtmClient?.CreateChannel("NETWORK", channelEventHandler);
         rtmChannel.Join();
+    }
+
+    void OnJoinSuccessHandler(int id)
+    {
+        agoraEngine.JoinLobby();
     }
 
     public void SendRTMChannelMessage(string message)
