@@ -124,9 +124,4 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
-    public void Button_LogOut()
-    {
-
-    }
 }

@@ -36,8 +36,6 @@ public class RtmEngine : MonoBehaviour
 
         userNameInputField.onValueChanged.AddListener(delegate { CheckForInput(); });
         joinTreefortButton.interactable = false;
-        // RTM client callbacks
-        
     }
 
     // Agora Essentials -------------- //
@@ -77,11 +75,12 @@ public class RtmEngine : MonoBehaviour
         Login();
     }
 
-    public void Login()
+    private void Login()
     {
         clientEventHandler = new RtmClientEventHandler();
         channelEventHandler = new RtmChannelEventHandler();
 
+        // RTM client callbacks
         clientEventHandler.OnLoginSuccess = OnClientLoginSuccessHandler;
         clientEventHandler.OnLoginFailure = OnClientLoginFailureHandler;
 
