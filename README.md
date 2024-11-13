@@ -1,5 +1,13 @@
-# agora unity rtm treefort
+# [ARCHIVED] agora unity rtm treefort
 
+**⚠️ This project is no longer maintained and has been archived.**  
+Please note that this repository is now in a read-only state and will not receive any further updates or support.
+
+We recommend using to the latest versions of the [**Agora Video SDK**](https://www.agora.io/en/products/video-call/) and [**Agora Signaling SDK**](https://www.agora.io/en/products/signaling/)
+
+For documentation and support, please visit the [Agora Documentation](https://docs.agora.io/en/).
+
+---
 ## An example running Agora Video RTC with RTM engine
 
 Please see tutorial in [this developer blog](https://www.agora.io/en/blog/agora-treefort-using-rtm-to-join-breakout-rooms-in-unity/) on set up and how things work in this project.
